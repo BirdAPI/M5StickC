@@ -1,14 +1,12 @@
-#include <esp_sleep.h>
 #include "AXP192.h"
 
-AXP192::AXP192()
-{
-  
-}
+#include <esp_sleep.h>
 
-void AXP192::begin(bool disableLDO2, bool disableLDO3, bool disableRTC, bool disableDCDC1, bool disableDCDC3)
-{  
-    Wire1.begin(21, 22);
+bool AXP192::begin(bool disableLDO2, bool disableLDO3, bool disableRTC, bool disableDCDC1, bool disableDCDC3)
+{
+    if (!Wire1.begin(SDA, SCL)) {
+      return false;
+    }
     Wire1.setClock(400000);
 
     // Set LDO2 & LDO3(TFT_LED & TFT) 3.0V
@@ -54,6 +52,8 @@ void AXP192::begin(bool disableLDO2, bool disableLDO3, bool disableRTC, bool dis
     
     // Enable bat detection
     Write1Byte(0x32, 0x46);
+
+    return true;
 }
 
 void AXP192::Write1Byte( uint8_t Addr ,  uint8_t Data )
@@ -221,112 +221,12 @@ float AXP192::GetCoulombData(void)
 }
 //----------coulomb_end_at_here----------
 
-uint16_t AXP192::GetVbatData(void){
-
-    uint16_t vbat = 0;
-    uint8_t buf[2];
-    ReadBuff(0x78,2,buf);
-    vbat = ((buf[0] << 4) + buf[1]); // V
-    return vbat;
-}
-
-uint16_t AXP192::GetVinData(void)
-{
-    uint16_t vin = 0;
-    uint8_t buf[2];
-    ReadBuff(0x56,2,buf);
-    vin = ((buf[0] << 4) + buf[1]); // V
-    return vin;
-}
-
-uint16_t AXP192::GetIinData(void)
-{
-    uint16_t iin = 0;
-    uint8_t buf[2];
-    ReadBuff(0x58,2,buf);
-    iin = ((buf[0] << 4) + buf[1]);
-    return iin;
-}
-
-uint16_t AXP192::GetVusbinData(void)
-{
-    uint16_t vin = 0;
-    uint8_t buf[2];
-    ReadBuff(0x5a,2,buf);
-    vin = ((buf[0] << 4) + buf[1]); // V
-    return vin;
-}
-
-uint16_t AXP192::GetIusbinData(void)
-{
-    uint16_t iin = 0;
-    uint8_t buf[2];
-    ReadBuff(0x5C,2,buf);
-    iin = ((buf[0] << 4) + buf[1]);
-    return iin;
-}
-
-uint16_t AXP192::GetIchargeData(void)
-{
-    uint16_t icharge = 0;
-    uint8_t buf[2];
-    ReadBuff(0x7A,2,buf);
-    icharge = ( buf[0] << 5 ) + buf[1] ;
-    return icharge;
-}
-
-uint16_t AXP192::GetIdischargeData(void)
-{
-    uint16_t idischarge = 0;
-    uint8_t buf[2];
-    ReadBuff(0x7C,2,buf);
-    idischarge = ( buf[0] << 5 ) + buf[1] ;
-    return idischarge;
-}
-
-uint16_t AXP192::GetTempData(void)
-{
-    uint16_t temp = 0;
-    uint8_t buf[2];
-    ReadBuff(0x5e,2,buf);
-    temp = ((buf[0] << 4) + buf[1]);
-    return temp;
-}
-
-uint32_t AXP192::GetPowerbatData(void)
-{
-    uint32_t power = 0;
-    uint8_t buf[3];
-    ReadBuff(0x70,2,buf);
-    power = (buf[0] << 16) + (buf[1] << 8) + buf[2];
-    return power;
-}
-
-uint16_t AXP192::GetVapsData(void)
-{
-    uint16_t vaps = 0;
-    uint8_t buf[2];
-    ReadBuff(0x7e,2,buf);
-    vaps = ((buf[0] << 4) + buf[1]);
-    return vaps;
-}
-
 void AXP192::SetSleep(void)
 {
     Write1Byte(0x31 , Read8bit(0x31) | ( 1 << 3)); // Power off voltag 3.0v
     Write1Byte(0x90 , Read8bit(0x90) | 0x07); // GPIO1 floating
     Write1Byte(0x82, 0x00); // Disable ADCs
     Write1Byte(0x12, Read8bit(0x12) & 0xA1); // Disable all outputs but DCDC1
-}
-
-uint8_t AXP192::GetWarningLeve(void)
-{
-    Wire1.beginTransmission(0x34);
-    Wire1.write(0x47);
-    Wire1.endTransmission();
-    Wire1.requestFrom(0x34, 1);
-    uint8_t buf = Wire1.read();
-    return (buf & 0x01);
 }
 
 // -- sleep

@@ -20,7 +20,7 @@
 
 class AXP192 {
 public:
-    AXP192();
+    AXP192() = default;
     /**
      * LDO2: Display backlight
      * LDO3: Display Control
@@ -28,35 +28,24 @@ public:
      * DCDC1: Main rail. When not set the controller shuts down.
      * DCDC3: Use unknown
      */
-    void  begin(bool disableLDO2 = false, bool disableLDO3 = false, bool disableRTC = false, bool disableDCDC1 = false, bool disableDCDC3 = false);
+    bool  begin(bool disableLDO2 = false, bool disableLDO3 = false, bool disableRTC = false, bool disableDCDC1 = false, bool disableDCDC3 = false);
     void  ScreenBreath(uint8_t brightness);
     bool  GetBatState();
   
-    void  EnableCoulombcounter(void);
-    void  DisableCoulombcounter(void);
-    void  StopCoulombcounter(void);
-    void  ClearCoulombcounter(void);
-    uint32_t GetCoulombchargeData(void);
-    uint32_t GetCoulombdischargeData(void);
-    float GetCoulombData(void); 
-    
-    uint16_t GetVbatData(void) __attribute__((deprecated));
-    uint16_t GetIchargeData(void) __attribute__((deprecated));
-    uint16_t GetIdischargeData(void) __attribute__((deprecated));
-    uint16_t GetTempData(void) __attribute__((deprecated));
-    uint32_t GetPowerbatData(void) __attribute__((deprecated));
-    uint16_t GetVinData(void) __attribute__((deprecated));
-    uint16_t GetIinData(void) __attribute__((deprecated));
-    uint16_t GetVusbinData(void) __attribute__((deprecated));
-    uint16_t GetIusbinData(void) __attribute__((deprecated));
-    uint16_t GetVapsData(void) __attribute__((deprecated));
-    uint8_t GetBtnPress(void);
+    void  EnableCoulombcounter();
+    void  DisableCoulombcounter();
+    void  StopCoulombcounter();
+    void  ClearCoulombcounter();
+    uint32_t GetCoulombchargeData();
+    uint32_t GetCoulombdischargeData();
+    float GetCoulombData(); 
+
+    uint8_t GetBtnPress();
 
       // -- sleep
-    void SetSleep(void);
+    void SetSleep();
     void DeepSleep(uint64_t time_in_us = 0);
     void LightSleep(uint64_t time_in_us = 0);
-    uint8_t GetWarningLeve(void) __attribute__((deprecated));
 
 public:
     // void SetChargeVoltage( uint8_t );
@@ -73,10 +62,10 @@ public:
     float GetAPSVoltage();
     float GetBatCoulombInput();
     float GetBatCoulombOut();
-    uint8_t GetWarningLevel(void);	
+    uint8_t GetWarningLevel();	
     void SetCoulombClear();
-    void SetLDO2( bool State );
-    void SetLDO3( bool State );
+    void SetLDO2(bool State);
+    void SetLDO3(bool State);
     void SetAdcState(bool State);
     
     void PowerOff();
