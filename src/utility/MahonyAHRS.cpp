@@ -16,7 +16,7 @@
 
 #include "MahonyAHRS.h"
 #include <math.h>
-#include <M5StickC.h>
+#include <Arduino.h>
 
 //---------------------------------------------------------------------------------------------------
 // Definitions

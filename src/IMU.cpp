@@ -1,16 +1,13 @@
 #include "IMU.h"
-#include <math.h>
 #include <Arduino.h>
-#include "M5StickC.h"
+#ifdef IMU
 #undef IMU
+#endif
 
-IMU::IMU() {
-}
-
-int IMU::Init(void) {
-    int imu_flag = M5.Sh200Q.Init();
+int IMU::Init() {
+    int imu_flag = sh200q.Init();
     if (imu_flag != 0) {
-        imu_flag = M5.Mpu6886.Init();
+        imu_flag = mpu6886.Init();
         if (imu_flag == 0) {
             imuType = IMU_MPU6886;
         } else {
@@ -26,65 +23,65 @@ int IMU::Init(void) {
 
 void IMU::getGres() {
     if (imuType == IMU_SH200Q) {
-        gRes = M5.Sh200Q.gRes;
+        gRes = sh200q.gRes;
     } else if (imuType == IMU_MPU6886) {
-        gRes = M5.Mpu6886.gRes;
+        gRes = mpu6886.gRes;
     }
 }
 
 void IMU::getAres() {
     if (imuType == IMU_SH200Q) {
-        gRes = M5.Sh200Q.aRes;
+        gRes = sh200q.aRes;
     } else if (imuType == IMU_MPU6886) {
-        gRes = M5.Mpu6886.aRes;
+        gRes = mpu6886.aRes;
     }
 }
 
 void IMU::getAccelAdc(int16_t *ax, int16_t *ay, int16_t *az) {
     if (imuType == IMU_SH200Q) {
-        M5.Sh200Q.getAccelAdc(ax, ay, az);
+        sh200q.getAccelAdc(ax, ay, az);
     } else if (imuType == IMU_MPU6886) {
-        M5.Mpu6886.getAccelAdc(ax, ay, az);
+        mpu6886.getAccelAdc(ax, ay, az);
     }
 }
 
 void IMU::getAccelData(float *ax, float *ay, float *az) {
     if (imuType == IMU_SH200Q) {
-        M5.Sh200Q.getAccelData(ax, ay, az);
+        sh200q.getAccelData(ax, ay, az);
     } else if (imuType == IMU_MPU6886) {
-        M5.Mpu6886.getAccelData(ax, ay, az);
+        mpu6886.getAccelData(ax, ay, az);
     }
 }
 
 void IMU::getGyroAdc(int16_t *gx, int16_t *gy, int16_t *gz) {
     if (imuType == IMU_SH200Q) {
-        M5.Sh200Q.getGyroAdc(gx, gy, gz);
+        sh200q.getGyroAdc(gx, gy, gz);
     } else if (imuType == IMU_MPU6886) {
-        M5.Mpu6886.getGyroAdc(gx, gy, gz);
+        mpu6886.getGyroAdc(gx, gy, gz);
     }
 }
 
 void IMU::getGyroData(float *gx, float *gy, float *gz) {
     if (imuType == IMU_SH200Q) {
-        M5.Sh200Q.getGyroData(gx, gy, gz);
+        sh200q.getGyroData(gx, gy, gz);
     } else if (imuType == IMU_MPU6886) {
-        M5.Mpu6886.getGyroData(gx, gy, gz);
+        mpu6886.getGyroData(gx, gy, gz);
     }
 }
 
 void IMU::getTempAdc(int16_t *t) {
     if (imuType == IMU_SH200Q) {
-        M5.Sh200Q.getTempAdc(t);
+        sh200q.getTempAdc(t);
     } else if (imuType == IMU_MPU6886) {
-        M5.Mpu6886.getTempAdc(t);
+        mpu6886.getTempAdc(t);
     }
 }
 
 void IMU::getTempData(float *t) {
     if (imuType == IMU_SH200Q) {
-        M5.Sh200Q.getTempData(t);
+        sh200q.getTempData(t);
     } else if (imuType == IMU_MPU6886) {
-        M5.Mpu6886.getTempData(t);
+        mpu6886.getTempData(t);
     }
 }
 

@@ -1,7 +1,5 @@
 #include "SH200Q.h"
-#include <math.h>
 #include <Arduino.h>
-
 
 
 SH200Q::SH200Q(){

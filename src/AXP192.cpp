@@ -1,3 +1,4 @@
+#include <esp_sleep.h>
 #include "AXP192.h"
 
 AXP192::AXP192()

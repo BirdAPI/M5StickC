@@ -3,6 +3,8 @@
 
 #include <Wire.h>
 #include <Arduino.h>
+#include <utility/SH200Q.h>
+#include <utility/MPU6886.h>
 #include "utility/MahonyAHRS.h"
 
 class IMU {
@@ -11,9 +13,12 @@ public:
         IMU_UNKNOWN = 0, IMU_SH200Q, IMU_MPU6886
     };
 
-    IMU();
+    IMU() = default;
 
-    int Init(void);
+    MPU6886 mpu6886;
+    SH200Q sh200q;
+
+    int Init();
 
     void getGres();
     void getAres();
